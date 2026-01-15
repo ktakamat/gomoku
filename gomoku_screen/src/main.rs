@@ -21,6 +21,52 @@ impl Game {
             white_captures: 0,
         }
     }
+
+    fn check_captures(&mut self, y: usize, x: usize) {
+        let player = self.board[y][x];
+        let opponent = if player == 1 { 2 } else { 1 };
+
+        let directions = [
+            (0, 1), (0, -1), (1, 0), (-1, 0),
+            (1, 1), (1, -1), (-1, 1), (-1, -1)
+        ];
+        
+        for (dy, dx) in directions.iter() {
+            let y1 = y as i32 + dy;
+            let x1 = x as i32 + dx;
+            let y2 = y as i32 + dy * 2;
+            let x2 = x as i32 + dx * 2;
+            let y3 = y as i32 + dy * 3;
+            let x3 = x as i32 + dx * 3;
+
+            if self.is_in_board(y3, x3) {
+                let s1 = self.board[y1 as usize][x1 as usize];
+                let s2 = self.board[y2 as usize][x2 as usize];
+                let s3 = self.board[y3 as usize][x3 as usize];
+                
+                if s1 == opponent && s2 == opponent && s3 == player {
+                    self.board[y1 as usize][x1 as usize];
+                    self.board[y2 as usize][x2 as usize];
+                    self.board[y3 as usize][y3 as usize];
+
+                    if s1 == opponent && s2 == opponent && s3 == player {
+                        self.board[y1 as usize][x1 as usize] = 0;
+                        self.board[y2 as usize][x2 as usize] = 0;
+
+                        if player == 1 {
+                            self.black_captures += 2;
+                        } else {
+                            self.white_captures += 2;
+                        }
+                    }
+                }
+
+            }
+        }
+    }
+    fn is_in_board(&self, y: i32, x: i32) -> bool {
+        x >= 0 && x < 19 && y >= 0 && y < 19
+    }
 }
 
 // このプログラムはmacroquadというライブライを使って動かし、立ち上がったウィンドウでgomokuと表示する
@@ -42,11 +88,14 @@ async fn main() {
             let y = ((my - OFFSET + 15.0) / CELL_SIZE) as i32;
             
             if x >= 0 && x < 19 && y >= 0 && y < 19 && game.board[y as usize][x as usize] == 0 {
+                let py = y as usize;
+                let px = x as usize;
                 if game.is_black_turn {
                     game.board[y as usize][x as usize] = 1;
                 } else {
                     game.board[y as usize][x as usize] = 2;
                 }
+                game.check_captures(py, px);
                 game.is_black_turn = !game.is_black_turn;
             }
         }
@@ -68,6 +117,7 @@ async fn main() {
         next_frame().await
     }
 }
+
 
 // fn get_ai_move(current_board: &[[i32; 19]; 19]) -> (usize, usize) {
 //     (10, 10)
