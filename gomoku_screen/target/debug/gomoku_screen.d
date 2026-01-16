@@ -1,1 +1,0 @@
-/Users/ktakamat/Desktop/42paris/gomoku/gomoku_screen/target/debug/gomoku_screen: /Users/ktakamat/Desktop/42paris/gomoku/gomoku_screen/src/game.rs /Users/ktakamat/Desktop/42paris/gomoku/gomoku_screen/src/main.rs /Users/ktakamat/Desktop/42paris/gomoku/gomoku_screen/src/rules/capture.rs /Users/ktakamat/Desktop/42paris/gomoku/gomoku_screen/src/rules/mod.rs
