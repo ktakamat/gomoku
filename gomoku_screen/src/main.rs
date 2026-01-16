@@ -45,22 +45,15 @@ impl Game {
                 let s3 = self.board[y3 as usize][x3 as usize];
                 
                 if s1 == opponent && s2 == opponent && s3 == player {
-                    self.board[y1 as usize][x1 as usize];
-                    self.board[y2 as usize][x2 as usize];
-                    self.board[y3 as usize][y3 as usize];
+                    self.board[y1 as usize][x1 as usize] = 0;
+                    self.board[y2 as usize][x2 as usize] = 0;
 
-                    if s1 == opponent && s2 == opponent && s3 == player {
-                        self.board[y1 as usize][x1 as usize] = 0;
-                        self.board[y2 as usize][x2 as usize] = 0;
-
-                        if player == 1 {
-                            self.black_captures += 2;
-                        } else {
-                            self.white_captures += 2;
-                        }
+                    if player == 1 {
+                        self.black_captures += 2;
+                    } else {
+                        self.white_captures += 2;
                     }
                 }
-
             }
         }
     }
