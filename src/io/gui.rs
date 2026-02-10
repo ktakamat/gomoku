@@ -30,13 +30,31 @@ impl Interface for GuiInterface {
                 }
             }
         }
+        if let Some(winner) = state.winner {
+            draw_rectangle(0.0, 0.0, screen_width(), screen_height(), Color::new(0.0, 0.0, 0.0, 0.6));
+
+            let text = if winner == 1 { "BLACK WINS!" } else { "WHITE WINS!" };
+            draw_text(text, screen_width() / 2.0 - 120.0, screen_height() / 2.0, 50.0, WHITE);
+
+            let btn_rect = Rect::new(screen_width() / 2.0 - 60.0, screen_height() / 2.0 + 40.0, 120.0, 40.0);
+            draw_rectangle(btn_rect.x, btn_rect.y, btn_rect.w, btn_rect.h, RED);
+            draw_text("CLOSE GAME", btn_rect.x + 10.0, btn_rect.y + 25.0, 20.0, WHITE);
+
+            if is_mouse_button_pressed(MouseButton::Left) {
+                let mouse_pos = mouse_position();
+                if btn_rect.contains(Vec2::new(mouse_pos.0, mouse_pos.1)) {
+                    std::process::exit(0);
+                }
+            }
+        }
 
         let player_name = if state.current_player() == 1 { "BLACK" } else { "WHITE" };
         draw_text(&format!("Turn: {}", player_name), 620.0, 50.0, 30.0, DARKGRAY);
         draw_text("Captures:", 620.0, 100.0, 25.0, DARKGRAY);
         draw_text(&format!("Black: {}", state.captures[0]), 620.0, 130.0, 25.0, BLACK);
         draw_text(&format!("White: {}", state.captures[1]), 620.0, 160.0, 25.0, WHITE);
-        // draw_text(&format!("AI Time: {:.3}s", state.last_ai_time), 620.0, 220.0, 20.0, GRAY);
+        let timer_text = format!("AI Time: {:.4}s", state.last_ai_time);
+        draw_text(&timer_text, 20.0, 40.0, 30.0, BLACK);
     }
 
     fn get_move(&mut self, state: &GameState) -> Option<(usize, usize)> {
